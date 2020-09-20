@@ -47,7 +47,7 @@ function App() {
             {id: v1(), title: "React", isDone: true},
             {id: v1(), title: "GraphQL", isDone: true},
             {id: v1(), title: "Rest API", isDone: true},
-            {id: v1(), title: "Rest API", isDone: false}],
+            {id: v1(), title: "TS", isDone: false}],
         [todolistID2]: [{id: v1(), title: "Bread", isDone: true},
             {id: v1(), title: "Books", isDone: false},
             {id: v1(), title: "Butter", isDone: true},
