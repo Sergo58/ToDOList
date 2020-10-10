@@ -11,7 +11,7 @@ export type TaskType = {
     title: string
     isDone: boolean
 }
-type ToDoListType = {
+export type ToDoListType = {
     id: string
     title: string
     filter: FilterValuesType
@@ -140,7 +140,7 @@ function App() {
                 </Toolbar>
             </AppBar>
             <Container fixed>
-                <Grid style={{padding:"15px"}}  container>
+                <Grid style={{padding: "15px"}} container>
                     <AddItemForm addItem={addToDoList}/>
                 </Grid>
                 <Grid spacing={3} container>
@@ -156,23 +156,23 @@ function App() {
                             }
                             return (
                                 <Grid item={true} key={tl.id}>
-                                    <Paper elevation={3} style={{padding:"15px"}}>
-                                    <TodoList
-                                        key={tl.id}
-                                        id={tl.id}
-                                        title={tl.title}
-                                        tasks={tasksForTodoList}
-                                        filter={tl.filter}
-                                        changeFilter={changeFilter}
-                                        removeToDoList={removeTodoList}
-                                        addTask={addTask}
-                                        removeTask={removeTasks}
-                                        changeStatus={changeStatus}
-                                        changeTaskTitle={changeTaskTitle}
-                                        changeToDoListTitle={changeToDoListTitle}
+                                    <Paper elevation={3} style={{padding: "15px"}}>
+                                        <TodoList
+                                            key={tl.id}
+                                            id={tl.id}
+                                            title={tl.title}
+                                            tasks={tasksForTodoList}
+                                            filter={tl.filter}
+                                            changeFilter={changeFilter}
+                                            removeToDoList={removeTodoList}
+                                            addTask={addTask}
+                                            removeTask={removeTasks}
+                                            changeStatus={changeStatus}
+                                            changeTaskTitle={changeTaskTitle}
+                                            changeToDoListTitle={changeToDoListTitle}
 
 
-                                    />
+                                        />
                                     </Paper>
                                 </Grid>
                             )
