@@ -28,11 +28,24 @@ export type changeTaskStatusActionType ={
     toDoListID: string
     isDone:boolean
 }
-
+let initialState:TaskStateType= {
+    ["todolistID1"]: [{id: v1(), title: "HTML&CSS", isDone: true},
+        {id: v1(), title: "JS", isDone: false},
+        {id: v1(), title: "React", isDone: true},
+        {id: v1(), title: "GraphQL", isDone: true},
+        {id: v1(), title: "Rest API", isDone: true},
+        {id: v1(), title: "TS", isDone: false}],
+    ["todolistID2"]: [{id: v1(), title: "Bread", isDone: true},
+        {id: v1(), title: "Books", isDone: false},
+        {id: v1(), title: "Butter", isDone: true},
+        {id: v1(), title: "Onion", isDone: true},
+        {id: v1(), title: "Beer", isDone: true},
+        {id: v1(), title: "Fish", isDone: false}]
+}
 
 type ActionType = changeTaskTitleActionType|removeTaskActionType|addTaskActionType|changeTaskStatusActionType|AddTodolistActionType|RemoveTodolistActionType
 
-export const tasksReducer = (state: TaskStateType, action: ActionType) => {
+export const tasksReducer = (state: TaskStateType=initialState, action: ActionType) => {
     switch (action.type) {
         case "CHANGE-TITLE-TASK":{
             let toDoListTasks=state[action.toDoListID];
@@ -74,7 +87,7 @@ task.title=action.title
             return stateCopy
         }
         default:
-            throw new Error("I don't understand this type")
+            return state
 
 
     }
