@@ -73,7 +73,7 @@ task.title=action.title
 
 
         }
-            return {...state, [action.toDoListID]:toDoListTasks};
+            return {...state, [action.toDoListID]:[...toDoListTasks]};
 
         }
         case "ADD-TODOLIST":{

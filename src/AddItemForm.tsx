@@ -4,7 +4,8 @@ import {AddBox, TextFields} from "@material-ui/icons";
 type AddItemFormType={
     addItem:(title:string)=>void
 }
-export function AddItemForm(props:AddItemFormType) {
+export const AddItemForm=React.memo( function (props:AddItemFormType) {
+    console.log("AddItemForm")
     let [title, setTitle] = useState<string>("")
     let [error, setError] = useState<string | null>(null)
 
@@ -26,6 +27,9 @@ export function AddItemForm(props:AddItemFormType) {
 
     }
     const onKeyUpHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+       if(error!==null){
+           setError(null)
+       }
         if (e.key === "Enter") {
             addItem();
         }
@@ -62,4 +66,4 @@ export function AddItemForm(props:AddItemFormType) {
             {/*{error && <div className={"error-message"}>{error}</div>}*/}
         </div>
     )
-};
+});
