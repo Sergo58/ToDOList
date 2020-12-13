@@ -1,41 +1,32 @@
-import React from 'react';
-import {AddItemForm, AddItemFormPropsType} from "./AddItemForm";
-import {Meta, Story} from "@storybook/react";
-import {action} from "@storybook/addon-actions";
-import {Task, TaskPropsType} from "./Task";
-
+import React from 'react'
+import {action} from '@storybook/addon-actions'
+import {Task} from './Task'
 
 export default {
-    title:"Example/Task",
-    component:Task,
-
-} as Meta;
-
-const removeCallback=action("Remove callback was clicked")
-const changeStatusCallback=action("changeStatus callback was clicked")
-const changeTitleCallback=action("changeTitle callback was clicked")
-
-const Template: Story<TaskPropsType> = (args) => <Task {...args}/>;
-
-const baseArgs = {
-    changeTaskStatus: changeStatusCallback,
-    changeTaskTitle: changeTitleCallback,
-    removeTask: removeCallback,
+    title: 'Task Stories',
+    component: Task
 }
 
+const removeCallback = action('Remove Button inside Task clicked');
+const changeStatusCallback = action('Status changed inside Task');
+const changeTitleCallback = action('Title changed inside Task');
 
-export const isNotCompletedTask = Template.bind({});
-isNotCompletedTask.args = {
-    todolistId:'todolist2',
-    ...baseArgs,
-    task:{id:'1',title:'CSS',isDone:false},
-
-}
-
-export const completedTask = Template.bind({});
-completedTask.args = {
-    todolistId:'todolist2',
-    ...baseArgs,
-    task:{id:'1',title:'JS',isDone:true},
-
+export const TaskBaseExample = (props: any) => {
+    return (
+        <div>
+            <Task
+                task={{id: '1', isDone: true, title: "CSS"}}
+                removeTask={removeCallback}
+                changeTaskTitle={changeTitleCallback}
+                changeTaskStatus={changeStatusCallback}
+                todolistId={"todolistId1"}
+            />
+            <Task
+                task={{id: '2', isDone: false, title: "JS"}}
+                removeTask={removeCallback}
+                changeTaskTitle={changeTitleCallback}
+                changeTaskStatus={changeStatusCallback}
+                todolistId={"todolistId2"}
+            />
+        </div>)
 }
