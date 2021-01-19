@@ -217,3 +217,33 @@ export const updateTaskStatusTC = (taskId: string, todolistId: string, status: T
         }
     }
 }
+
+
+export const changeTaskTitleTC = (taskId: string,todolistId: string,title:string) => {
+    return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+
+// так как мы обязаны на сервер отправить все св-ва, которые сервер ожидает, а не только
+// те, которые мы хотим обновить, соответственно нам нужно в этом месте взять таску целиком  // чтобы у неё отобрать остальные св-ва
+
+        const allTasksFromState = getState().tasks;
+        const tasksForCurrentTodolist = allTasksFromState[todolistId]
+        const task = tasksForCurrentTodolist.find(t => {
+            return t.id === taskId
+        })
+
+
+        if (task) {
+            todolistsAPI.updateTask(todolistId, taskId, {
+                title: title,
+                startDate: task.startDate,
+                priority: task.priority,
+                description: task.description,
+                deadline: task.deadline,
+                status:task.status
+            }).then(() => {
+                const action = changeTaskTitleAC(taskId, title, todolistId)
+                dispatch(action)
+            })
+        }
+    }
+}
