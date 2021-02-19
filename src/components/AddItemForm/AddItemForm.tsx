@@ -1,9 +1,12 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {Box, Button, FormControl, IconButton, TextField} from '@material-ui/core';
 import {AddBox} from '@material-ui/icons';
+import {useSelector} from "react-redux";
+import {AppRootStateType} from "../../app/store";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
+    disable:boolean
 }
 
 export const AddItemForm = React.memo(function(props: AddItemFormPropsType) {
@@ -11,7 +14,7 @@ export const AddItemForm = React.memo(function(props: AddItemFormPropsType) {
 
     let [title, setTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
-
+    let entityStatus=useSelector<AppRootStateType>(state => state.app.status)
     const addItem = () => {
         if (title.trim() !== "") {
             props.addItem(title);
@@ -42,8 +45,9 @@ export const AddItemForm = React.memo(function(props: AddItemFormPropsType) {
                    onKeyPress={onKeyPressHandler}
                    label="Title"
                    helperText={error}
+                   disabled={props.disable}
         />
-        <IconButton color="primary" onClick={addItem}>
+        <IconButton disabled={props.disable} color="primary" onClick={addItem}>
             <AddBox />
         </IconButton>
     </div>

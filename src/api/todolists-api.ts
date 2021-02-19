@@ -1,9 +1,10 @@
 import axios from 'axios'
+import {RequestStatusType} from "../app/app-reducer";
 
 const settings = {
     withCredentials: true,
     headers: {
-        'API-KEY': '8f2534e2-22a4-4052-894e-a66c04807482'
+        'API-KEY': '49002ff0-14a4-442d-95b4-9079087ed1b9'
     }
 }
 const instance = axios.create({
@@ -79,6 +80,8 @@ export type TaskType = {
     todoListId: string
     order: number
     addedDate: string
+    entityStatus: RequestStatusType
+
 }
 export type UpdateTaskModelType = {
     title: string
