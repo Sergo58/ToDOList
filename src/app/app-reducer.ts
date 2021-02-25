@@ -1,14 +1,11 @@
+import {Dispatch} from "redux";
+import {setIsLoggedInAC} from "../features/Login/auth-reducer";
+import {authAPI} from "../api/todolists-api";
 
-
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-
-const initialState = {
-    status: 'loading' as RequestStatusType as string,
-    error: null}
-
-type InitialStateType = {
-    status: string
-    error:string|null
+const initialState: InitialStateType = {
+    status: 'idle',
+    error: null,
+    initialized:false
 }
 
 export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
@@ -17,15 +14,45 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
             return {...state, status: action.status}
         case 'APP/SET-ERROR':
             return {...state, error: action.error}
+        case "APP/SET-IS-INITIALIZED":
+            return {...state,initialized:action.value}
         default:
-            return state
+            return {...state}
     }
 }
-export const setAppStatusAC = (status: string) =>
-    ({type: 'APP/SET-STATUS', status:status} as const)
 
-export const setAppErrorAC = (error: string|null) =>
-    ({type: 'APP/SET-ERROR', error:error} as const)
+export type RequestStatusType =  'idle' | 'loading' | 'succeeded' | 'failed'
+export type InitialStateType = {
+    // происходит ли сейчас взаимодействие с сервером
+    status: RequestStatusType
+    // если ошибка какая-то глобальная произойдёт - мы запишем текст ошибки сюда
+    error: string | null
+
+    initialized:boolean
+}
+
+export const setAppErrorAC = (error: string | null) => ({ type: 'APP/SET-ERROR', error } as const)
+export const setAppStatusAC = (status:  RequestStatusType) => ({ type: 'APP/SET-STATUS', status } as const)
+export const setAppInitialisedAC=(value:boolean)=>({type:"APP/SET-IS-INITIALIZED",value} as const)
+
+export const initializeAppTC = () => (dispatch: Dispatch) => {
+    authAPI.me().then(res => {
+        debugger
+        if (res.data.resultCode === 0) {
+            dispatch(setIsLoggedInAC(true));
+        } else {
+        }
+        dispatch(setAppInitialisedAC(true))
+    })
+}
 
 
-type ActionsType = |ReturnType<typeof setAppErrorAC>|ReturnType<typeof setAppStatusAC>
+
+export type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>
+export type SetAppStatusActionType = ReturnType<typeof setAppStatusAC>
+export type setAppInitialisedACType = ReturnType<typeof setAppInitialisedAC>
+
+type ActionsType =
+    | SetAppErrorActionType
+    | SetAppStatusActionType
+|setAppInitialisedACType
