@@ -1,11 +1,12 @@
 import {Dispatch} from "redux";
 import {setIsLoggedInAC} from "../features/Login/auth-reducer";
 import {authAPI} from "../api/todolists-api";
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 
 const initialState: InitialStateType = {
     status: 'idle',
     error: null,
-    initialized:false
+    isInitialized:false
 }
 
 export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
@@ -15,7 +16,7 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
         case 'APP/SET-ERROR':
             return {...state, error: action.error}
         case "APP/SET-IS-INITIALIZED":
-            return {...state,initialized:action.value}
+            return {...state,isInitialized:action.value}
         default:
             return {...state}
     }
@@ -28,7 +29,7 @@ export type InitialStateType = {
     // если ошибка какая-то глобальная произойдёт - мы запишем текст ошибки сюда
     error: string | null
 
-    initialized:boolean
+    isInitialized:boolean
 }
 
 export const setAppErrorAC = (error: string | null) => ({ type: 'APP/SET-ERROR', error } as const)
@@ -36,14 +37,25 @@ export const setAppStatusAC = (status:  RequestStatusType) => ({ type: 'APP/SET-
 export const setAppInitialisedAC=(value:boolean)=>({type:"APP/SET-IS-INITIALIZED",value} as const)
 
 export const initializeAppTC = () => (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC('loading'))
     authAPI.me().then(res => {
         debugger
+
         if (res.data.resultCode === 0) {
             dispatch(setIsLoggedInAC(true));
+            dispatch(setAppStatusAC('succeeded'))
         } else {
+            handleServerAppError(res.data, dispatch);
         }
-        dispatch(setAppInitialisedAC(true))
-    })
+
+    }
+    )
+        .catch((error) => {
+            handleServerNetworkError(error, dispatch)
+        })
+        .finally(()=>{
+            dispatch(setAppInitialisedAC(true))
+        })
 }
 
 

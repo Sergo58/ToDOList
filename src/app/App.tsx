@@ -25,15 +25,16 @@ type PropsType = {
 }
 
 function App({demo = false}: PropsType) {
+    useEffect(()=>{
+        dispatch(initializeAppTC())
+    },[])
     const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
-    const initialized = useSelector<AppRootStateType, boolean>((state) => state.app.initialized)
+    const initialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized)
     const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
 
     const dispatch=useDispatch()
 
-    useEffect(()=>{
-        dispatch(initializeAppTC())
-    },[])
+
 
     let logOutHandler=useCallback(()=>{
         dispatch(logOutTC())
@@ -67,8 +68,8 @@ function App({demo = false}: PropsType) {
                 <Switch>
                 <Route exact path={'/'} render={()=><TodolistsList demo={demo}/>}/>
                 <Route path={'/login'} render={()=><Login/>} />
-                <Route path={ '*' } render={ () => <h1>404: PAGE NOT FOUND</h1> }/>
-                <Redirect from={"*"} to={"/404"}/>
+                <Route path={ '/404' } render={ () => <h1>404: PAGE NOT FOUND</h1> }/>
+                <Redirect from={'*'} to={'/404'}/>
                 </Switch>
             </Container>
         </div>
