@@ -25,20 +25,19 @@ type PropsType = {
 }
 
 function App({demo = false}: PropsType) {
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(initializeAppTC())
-    },[])
+    }, [])
     const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
     const initialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized)
     const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
 
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
 
 
-
-    let logOutHandler=useCallback(()=>{
+    let logOutHandler = useCallback(() => {
         dispatch(logOutTC())
-    },[])
+    }, [])
 
     if (!initialized) {
         return <div
@@ -49,31 +48,32 @@ function App({demo = false}: PropsType) {
 
 
     return (
-  <BrowserRouter>
-        <div className="App">
-            <ErrorSnackbar />
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton edge="start" color="inherit" aria-label="menu">
-                        <Menu/>
-                    </IconButton>
-                    <Typography variant="h6">
-                        News
-                    </Typography>
-                    {isLoggedIn && <Button color="inherit" onClick={logOutHandler}>Log out</Button>}
-                </Toolbar>
-             { status === 'loading' &&  <LinearProgress /> }
-            </AppBar>
-            <Container fixed>
-                <Switch>
-                <Route exact path={'/'} render={()=><TodolistsList demo={demo}/>}/>
-                <Route path={'/login'} render={()=><Login/>} />
-                <Route path={ '/404' } render={ () => <h1>404: PAGE NOT FOUND</h1> }/>
-                <Redirect from={'*'} to={'/404'}/>
-                </Switch>
-            </Container>
-        </div>
-  </BrowserRouter>
+        <BrowserRouter>
+            <div className="App">
+                <ErrorSnackbar/>
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton edge="start" color="inherit" aria-label="menu">
+                            <Menu/>
+                        </IconButton>
+                        <Typography variant="h6">
+                            News
+                        </Typography>
+                        {isLoggedIn && <Button color="inherit" onClick={logOutHandler}>Log out</Button>}
+                    </Toolbar>
+                    {status === 'loading' && <LinearProgress/>}
+                </AppBar>
+                <Container fixed>
+                    <Switch>
+                        <Route path={'/todoList'} exact render={() => <Redirect to={'/'}/>}/>
+                        <Route exact path={'/'} render={() => <TodolistsList demo={demo}/>}/>
+                        <Route path={'/login'} render={() => <Login/>}/>
+                        <Route path={'/404'} render={() => <h1>404: PAGE NOT FOUND</h1>}/>
+                        <Redirect from={'*'} to={'/404'}/>
+                    </Switch>
+                </Container>
+            </div>
+        </BrowserRouter>
     )
 }
 
